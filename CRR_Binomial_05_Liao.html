@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CRR 二元樹選擇權評價｜05 廖</title>
+<style>
+:root{color-scheme:light;--navy:#172b48;--ink:#1e304b;--muted:#64748b;--line:#dce5ef;--teal:#087e84;--surface:#fff;--bg:#f3f6fa;--blue:#3f6bad}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Microsoft JhengHei","Noto Sans TC",sans-serif;line-height:1.55}button,input,select{font:inherit}.wrap{max-width:1440px;margin:auto;padding:32px 32px 60px}.top{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:22px}.eyebrow{font-size:12px;font-weight:750;letter-spacing:.12em;color:var(--teal)}h1{margin:4px 0 0;font-size:clamp(23px,3vw,34px);letter-spacing:-.03em;color:var(--navy)}.subtitle{margin:6px 0 0;color:var(--muted);font-size:14px}.id-tag{white-space:nowrap;border:1px solid #c8d6e4;background:white;border-radius:12px;padding:12px 18px;font-size:15px;font-weight:750;color:var(--navy)}.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 18px rgba(27,52,82,.035)}.input-panel{padding:24px}.section-title{font-size:18px;font-weight:750;color:var(--navy);margin:0 0 16px}.form-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.field label{display:block;font-size:13px;color:#526781;margin-bottom:7px;font-weight:650}.field input,.field select{width:100%;border:1px solid #cfdbe8;background:#fff;border-radius:9px;padding:11px 12px;outline:none;color:var(--navy);min-height:46px;transition:border-color .15s,box-shadow .15s}.field input:focus,.field select:focus{border-color:var(--teal);box-shadow:0 0 0 3px #087e8420}.help{font-size:12px;color:var(--muted);margin:7px 0 0}.controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:23px}.btn{border-radius:9px;padding:11px 19px;font-weight:700;cursor:pointer;border:1px solid transparent;min-height:44px}.btn.primary{background:var(--navy);color:#fff}.btn.primary:hover{background:#29476e}.btn.secondary{border-color:#cbd8e6;background:white;color:var(--ink)}.btn.secondary:hover{background:#f1f5f9}.btn svg{vertical-align:-3px;margin-right:7px}.hint{font-size:13px;color:var(--muted)}.error{margin:16px 0 0;padding:12px 15px;border:1px solid #f6c9c9;background:#fff4f4;color:#9b2929;border-radius:9px;display:none}.error.show{display:block}.results{margin-top:22px;display:grid;grid-template-columns:1.15fr 2fr;gap:18px}.result-box{padding:23px;display:flex;flex-direction:column;justify-content:center;min-height:167px}.result-label{font-size:13px;color:var(--muted);font-weight:700}.price{font-weight:800;font-size:clamp(30px,3vw,44px);color:var(--navy);margin:8px 0 3px;font-variant-numeric:tabular-nums}.result-note{font-size:12px;color:var(--muted)}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:24px}.metric{border-left:1px solid var(--line);padding:0 15px}.metric:first-child{border:none;padding-left:0}.metric-label{font-size:12px;color:var(--muted)}.metric-value{font-size:18px;font-weight:750;color:var(--navy);font-variant-numeric:tabular-nums;margin-top:4px}.trees{margin-top:25px}.tree-panel{padding:22px;margin-top:16px}.tree-heading{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:14px}.tree-heading h2{margin:0;font-size:18px;color:var(--navy)}.tree-heading p{margin:0;font-size:12px;color:var(--muted)}.tree-scroll{overflow:auto;border:1px solid #e7edf4;border-radius:12px;background:linear-gradient(90deg,#fbfcfe,#ffffff);min-height:200px}.tree-canvas{position:relative;margin:0 auto}.tree-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.node{position:absolute;transform:translate(-50%,-50%);border:1px solid #d4e2ef;border-radius:8px;padding:7px 9px;min-width:97px;max-width:117px;text-align:center;background:white;box-shadow:0 2px 4px #1529470a;font-size:13px;font-weight:650;font-variant-numeric:tabular-nums;z-index:1}.node.root{border:2px solid var(--teal);background:#eefaf9;color:#075b61}.node.terminal{background:#edf3fa;border-color:#bed0e4}.node.zero{color:#8793a3}.step-label{position:absolute;transform:translateX(-50%);font-size:11px;color:#7e90a7;font-weight:650}.empty{display:flex;align-items:center;justify-content:center;height:190px;color:#91a0b1;font-size:14px;text-align:center;padding:16px}.footnote{margin-top:18px;color:var(--muted);font-size:12px}.formula{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:#526681}.pill{display:inline-block;background:#e8f5f5;color:#08676c;font-size:12px;font-weight:700;padding:4px 9px;border-radius:20px}.visually-hidden{position:absolute;left:-9999px}@media(max-width:900px){.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.results{grid-template-columns:1fr}.metrics{padding:20px}}@media(max-width:550px){.wrap{padding:20px 12px 36px}.top{align-items:flex-start}.id-tag{padding:9px;font-size:13px}.input-panel,.tree-panel{padding:15px}.form-grid{gap:12px}.metrics{grid-template-columns:repeat(2,1fr);row-gap:20px}.metric:nth-child(3){border:0;padding-left:0}.hint{width:100%}}@media print{body{background:white}.wrap{max-width:none;padding:0}.panel{box-shadow:none;break-inside:avoid}.controls{display:none}.tree-scroll{overflow:visible}.top{margin-bottom:12px}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="top">
+    <div><div class="eyebrow">PROJECT 2 · OPTION VALUATION</div><h1>CRR 二元樹選擇權評價</h1><p class="subtitle">由 Excel VBA 轉換為純 HTML / JavaScript，可直接在瀏覽器操作</p></div>
+    <div class="id-tag" aria-label="學號後兩碼及姓氏">05 廖</div>
+  </header>
+  <section class="panel input-panel" aria-labelledby="inputTitle">
+    <h2 class="section-title" id="inputTitle">模型參數</h2>
+    <form id="crrForm">
+      <div class="form-grid">
+        <div class="field"><label for="spot">目前股價 Spot (S₀)</label><input id="spot" name="spot" type="number" step="any" min="0.000001" required value="70"></div>
+        <div class="field"><label for="strike">執行價格 Strike (K)</label><input id="strike" name="strike" type="number" step="any" min="0" required value="80"></div>
+        <div class="field"><label for="expiry">選擇權年期 T（年）</label><input id="expiry" name="expiry" type="number" step="any" min="0.000001" required value="1"></div>
+        <div class="field"><label for="rate">無風險利率 r（% / 年）</label><input id="rate" name="rate" type="number" step="any" required value="2"><p class="help">輸入 2 代表 2%，與 VBA 的 0.02 相同</p></div>
+        <div class="field"><label for="vol">股價報酬波動率 σ（% / 年）</label><input id="vol" name="vol" type="number" step="any" min="0.000001" required value="20"><p class="help">輸入 20 代表 20%，與 VBA 的 0.2 相同</p></div>
+        <div class="field"><label for="steps">每年計算期數 n</label><input id="steps" name="steps" type="number" min="1" max="20" step="1" required value="5"><p class="help">依原 VBA：總步數為 n，Δt = T / n</p></div>
+        <div class="field"><label for="option">買權或賣權 Option Type</label><select id="option" name="option"><option value="C">買權 Call（C）</option><option value="P" selected>賣權 Put（P）</option></select></div>
+        <div class="field"><label for="exercise">歐式或美式 Exercise Type</label><select id="exercise" name="exercise"><option value="E">歐式 European（E）</option><option value="A" selected>美式 American（A）</option></select></div>
+      </div>
+      <div class="controls">
+        <button class="btn primary" type="submit"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5v14h16M8 15l4-5 4 3 4-7"/></svg>計算選擇權（CRRTree）</button>
+        <button class="btn secondary" type="button" id="clearBtn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2m3 0-1 14H6L5 6m5 4v7m4-7v7"/></svg>清除樹（ClearTree）</button>
+        <span class="hint">清除樹會移除計算結果，保留輸入設定。</span>
+      </div>
+      <div id="error" class="error" role="alert" aria-live="assertive"></div>
+    </form>
+  </section>
+  <section class="results" aria-live="polite">
+    <div class="panel result-box"><div class="result-label">選擇權理論價值</div><div class="price" id="optionPrice">—</div><div class="result-note" id="resultNote">按「計算選擇權」查看結果</div></div>
+    <div class="panel metrics"><div class="metric"><div class="metric-label">上漲因子 u</div><div class="metric-value" id="up">—</div></div><div class="metric"><div class="metric-label">下跌因子 d = 1 / u</div><div class="metric-value" id="down">—</div></div><div class="metric"><div class="metric-label">風險中立機率 p</div><div class="metric-value" id="prob">—</div></div><div class="metric"><div class="metric-label">每期時間 Δt</div><div class="metric-value" id="dt">—</div></div></div>
+  </section>
+  <section class="trees">
+    <div class="tree-panel panel"><div class="tree-heading"><h2>01　股價二元樹</h2><p>上分支：股價乘 u　｜　下分支：股價乘 d</p></div><div id="stockTree" class="tree-scroll"><div class="empty">輸入參數並計算後，股價樹將顯示在這裡。</div></div></div>
+    <div class="tree-panel panel"><div class="tree-heading"><h2>02　選擇權價值二元樹</h2><p>自到期日向前折現；美式選擇權比較立即履約與持有價值</p></div><div id="optionTree" class="tree-scroll"><div class="empty">輸入參數並計算後，選擇權樹將顯示在這裡。</div></div></div>
+  </section>
+  <p class="footnote"><span class="pill">CRR 模型</span>　<span class="formula">u = exp(σ√Δt), d = 1/u, p = (exp(rΔt) − d)/(u − d)</span>。沿用原始 VBA 的連續複利與風險中立反向遞推方法；所有計算在本機瀏覽器完成，不需 Excel、巨集或伺服器。</p>
+</main>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const fmt = (x, digits=5) => Number.isFinite(x) ? x.toFixed(digits).replace(/\.?0+$/,'') : '—';
+const nf = (x, digits=6) => Number.isFinite(x) ? x.toFixed(digits) : '—';
+
+// JavaScript 版本：原始 VBA Sub CRRTree()。
+function CRRTree() {
+  $('error').classList.remove('show');
+  const spot = Number($('spot').value), K = Number($('strike').value);
+  const T = Number($('expiry').value), r = Number($('rate').value)/100;
+  const vol = Number($('vol').value)/100, n = Number($('steps').value);
+  const opType = $('option').value, exType = $('exercise').value;
+  if (![$('spot'),$('strike'),$('expiry'),$('rate'),$('vol'),$('steps')].every(el => el.value.trim() !== '') ||
+      ![spot,K,T,r,vol,n].every(Number.isFinite) || spot<=0 || K<0 || T<=0 || vol<=0 ||
+      !Number.isInteger(n) || n<1 || n>20) {
+    showError('請檢查輸入：股價、年期及波動率須大於 0；執行價不得小於 0；計算期數須為 1～20 的整數。');return;
+  }
+  const dt=T/n;
+  const u=Math.exp(vol*Math.sqrt(dt));
+  const d=1/u;
+  const p=(Math.exp(r*dt)-d)/(u-d);
+  if (![u,d,p].every(Number.isFinite)||p<0||p>1) {
+    showError('這組參數無法建立有效的風險中立二元樹（p 不在 0～1 間）。請調整利率、波動率或期數。');return;
+  }
+  // 與 VBA 的 S(t,j) 一致：j 在此由 0 開始，代表向下移動次數。
+  const stock=Array.from({length:n+1}, (_,t)=>Array.from({length:t+1},(_,j)=>spot*Math.pow(u,t-j)*Math.pow(d,j)));
+  const op=Array.from({length:n+1},(_,t)=>Array(t+1).fill(0));
+  for(let j=0;j<=n;j++) op[n][j] = opType==='C' ? Math.max(stock[n][j]-K,0) : Math.max(K-stock[n][j],0);
+  const discount=Math.exp(-r*dt);
+  for(let t=n-1;t>=0;t--) {
+    for(let j=0;j<=t;j++) {
+      const hold=discount*(p*op[t+1][j]+(1-p)*op[t+1][j+1]);
+      const exercise=opType==='C' ? Math.max(stock[t][j]-K,0) : Math.max(K-stock[t][j],0);
+      op[t][j]=exType==='A' ? Math.max(exercise,hold) : hold;
+    }
+  }
+  $('optionPrice').textContent=nf(op[0][0],5);
+  $('resultNote').textContent=`${exType==='A'?'美式':'歐式'}${opType==='C'?'買權':'賣權'} ｜ ${n} 期 CRR 模型`;
+  $('up').textContent=nf(u,6);$('down').textContent=nf(d,6);$('prob').textContent=nf(p,6);$('dt').textContent=fmt(dt,6)+' 年';
+  renderTree('stockTree',stock,'stock'); renderTree('optionTree',op,'option');
+}
+function showError(message){$('error').textContent=message;$('error').classList.add('show');}
+
+// JavaScript 版本：原始 VBA Sub ClearTree()，保留輸入值並清掉輸出。
+function ClearTree(){
+  $('error').classList.remove('show');
+  $('optionPrice').textContent='—';$('resultNote').textContent='按「計算選擇權」查看結果';
+  for(const id of ['up','down','prob','dt']) $(id).textContent='—';
+  $('stockTree').innerHTML='<div class="empty">樹狀圖已清除，修改參數後可重新計算。</div>';
+  $('optionTree').innerHTML='<div class="empty">樹狀圖已清除，修改參數後可重新計算。</div>';
+}
+function renderTree(targetId,values,kind){
+  const parent=$(targetId); parent.replaceChildren();
+  const n=values.length-1;
+  const col=155, stepY=61, marginX=80, marginY=49;
+  const width=marginX*2+n*col;
+  const height=marginY*2+n*stepY;
+  const canvas=document.createElement('div');canvas.className='tree-canvas';canvas.style.width=width+'px';canvas.style.height=height+'px';
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('viewBox',`0 0 ${width} ${height}`);svg.setAttribute('class','tree-svg');svg.setAttribute('aria-hidden','true');
+  const coords=(t,j)=>({x:marginX+t*col,y:height/2+(2*j-t)*stepY/2});
+  for(let t=0;t<n;t++) for(let j=0;j<=t;j++){
+    const from=coords(t,j);
+    for(const child of [j,j+1]){
+      const to=coords(t+1,child);
+      const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+      line.setAttribute('x1',from.x);line.setAttribute('y1',from.y);line.setAttribute('x2',to.x);line.setAttribute('y2',to.y);
+      line.setAttribute('stroke',kind==='stock'?'#abc9d0':'#b7c5d9');line.setAttribute('stroke-width','1.5');
+      svg.appendChild(line);
+    }
+  }
+  canvas.appendChild(svg);
+  for(let t=0;t<=n;t++){
+    const tag=document.createElement('span'); tag.className='step-label';tag.textContent=`第 ${t} 期`;
+    tag.style.left=(marginX+t*col)+'px';tag.style.top='12px';canvas.appendChild(tag);
+    for(let j=0;j<=t;j++){
+      const {x,y}=coords(t,j), val=values[t][j];
+      const node=document.createElement('div');node.className='node'+(t===0?' root':'')+(t===n?' terminal':'')+(Math.abs(val)<1e-12?' zero':'');
+      node.textContent=nf(val,5);node.title=`第 ${t} 期，第 ${j+1} 個節點：${val.toFixed(9)}`;
+      node.style.left=x+'px';node.style.top=y+'px';canvas.appendChild(node);
+    }
+  }
+  parent.appendChild(canvas);
+}
+$('crrForm').addEventListener('submit',e=>{e.preventDefault();CRRTree();});
+$('clearBtn').addEventListener('click',ClearTree);
+CRRTree();
+</script>
+</body>
+</html>
